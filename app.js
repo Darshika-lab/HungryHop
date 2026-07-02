@@ -8,19 +8,11 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api' , Routes);
+//changes
 
-
-export  function gear (a){
-    res.send("Gear 1");
-}
-
-export  function gear (a,b){
-    res.send("Gear 2");
-}
-
-gear(a);
-gear(a,b);
-
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Route not found' });
+});
 app.listen(PORT, () => {
     console.log(`Server is Connected on ${PORT}`);
 });
