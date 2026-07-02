@@ -1,0 +1,23 @@
+{
+  "name": "hungryhop",
+  "version": "1.0.0",
+  "description": "Food Ordering App",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "darshika"
+  },
+  "author": "Darshika",
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.22.5",
+    "node": "^26.4.0"
+  }
+}
