@@ -5,12 +5,17 @@
     
 // }
 
-import { createUser, getUser } from '../AuthModules/user.module.js';
-
+import { createUser, getUser, findUserByEmail } from '../AuthModules/user.module.js';
+import { passwordHashing, compareHashing } from '../AuthServices/password.hashing.js';
+import { createToken } from '../AuthServices/jwt.js';
 export async function signup(req,res) {
     try{
     const {userName, email, password, contact } = req.body;
-    const user = await createUser(userName, email, password, contact);
+
+        // password --> hashed password
+       const hashedpassword = await passwordHashing(password);
+
+        const user = await createUser(userName, email, hashedpassword, contact);
 
     return res.status(200).json({
         success: true,
@@ -19,7 +24,7 @@ export async function signup(req,res) {
             id:         "         "+user.id,
             userName:   "   "+user.userName,
             email:      "      "+user.email,
-            contact:    "    "+user.contact    
+            contact:    "    "+user.contact, 
         }
     })
 }
@@ -36,15 +41,35 @@ export async function signup(req,res) {
 
 export async function login(req,res) {
     try{
+
+        //input from user
         const { email, password } = req.body;
-        const user = await getUser(email, password)
-        if(!user){
+
+        //find user 
+        const user = await findUserByEmail( email );
+        if(!getUser){
+            return res.status(401).json({
+                success: false,
+                message: "No User Found!"
+            })
+        }
+
+        //compare password
+        const isPasswordMatch = await compareHashing(password, user.password)
+
+        //wrong Password check
+        if(!isPasswordMatch){
             return res.status(200).json({
             success:false,
             message: "Invalid Email or Password"
         })
     }
+
+        //success
         else{
+        //gen token
+        const token = createToken(user.id, user.email);
+        console.log("token passed =>", token);
         return res.status(200).json({
             success:true,
             message: "User Logged in Successfully",
@@ -52,11 +77,13 @@ export async function login(req,res) {
             id:         "         "+user.id,
             userName:   "   "+user.userName,
             email:      "      "+user.email,
-            contact:    "    "+user.contact    
+            contact:    "    "+user.contact,
+            token:      "      "+token
         }
         })
     }
 }
+    //Internal Server Error
     catch(err){
            console.error("Error => ", err);
         return res.status(500).json({
