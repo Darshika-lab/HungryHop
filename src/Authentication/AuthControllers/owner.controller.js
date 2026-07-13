@@ -1,28 +1,22 @@
-// export const signup = async(req,res) => {
-
-// }
-// export async function signup(req,res) {
-    
-// }
-
-import { createUser, getUser, findUserByEmail } from '../AuthModules/user.module.js';
+import { createUser, getUser, findUserByEmail } from "../AuthModules/owner.module.js";
 import { passwordHashing, compareHashing } from '../AuthServices/password.hashing.js';
 import { createToken } from '../AuthServices/jwt.js';
+
 export async function signup(req,res) {
     try{
-    const {userName, email, password, contact } = req.body;
+    const {name, email, password, contact} = req.body;
 
         // password --> hashed password
-    const hashedpassword = await passwordHashing(password);
+       const hashedpassword = await passwordHashing(password);
 
-    const user = await createUser(userName, email, hashedpassword, contact);
+        const user = await createUser(name, email, hashedpassword, contact);
 
     return res.status(200).json({
         success: true,
         message: "User Created Successfully",
         user: {
             id:         "         "+user.id,
-            userName:   "   "+user.userName,
+            name:       "       "+user.name,
             email:      "      "+user.email,
             contact:    "    "+user.contact, 
         }
@@ -38,6 +32,7 @@ export async function signup(req,res) {
     }
 }
 
+
 export async function login(req,res) {
     try{
 
@@ -46,6 +41,7 @@ export async function login(req,res) {
 
         //find user 
         const user = await findUserByEmail( email );
+
         if(!user){
             return res.status(401).json({
                 success: false,
@@ -74,7 +70,7 @@ export async function login(req,res) {
             message: "User Logged in Successfully",
              user: {
             id:         "         "+user.id,
-            userName:   "   "+user.userName,
+            name:       "        "+user.name,
             email:      "      "+user.email,
             contact:    "    "+user.contact,
             token:      "      "+token

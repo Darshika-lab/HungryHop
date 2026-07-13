@@ -1,10 +1,10 @@
 import { Router } from "express";
-import  Auth  from "../Authentication/AuthRouters/auth.router.js";
+import userRoutes from "../Authentication/AuthRouters/user.router.js";
+import ownerRoutes from "../Authentication/AuthRouters/owner.router.js";
+import restaurant from "../Restaurants/Routes/restaurants.register.js";
 const Routes = Router();
-import { signupValidation } from "../../Validation/user.auth.validator.js";
-import validate from "../Middleware/uservalidator.middelware.js";
 
-Routes.use('/authsignin', signupValidation, validate, Auth);
-Routes.use('/authLogin', Auth);
-
+Routes.use('/user', userRoutes);
+Routes.use('/owner',ownerRoutes);
+Routes.use('/restaurants',restaurant)
 export default Routes;

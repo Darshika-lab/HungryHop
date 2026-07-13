@@ -25,3 +25,17 @@ export const signupValidation =
     )
 ,      
 ]
+
+export const loginValidation = 
+[
+    body ("email")
+    .notEmpty()
+    .withMessage("UserName Cannot Be Empty")
+    .isEmail()
+    .withMessage("Must Be an Valid Email formate: mail@example.com")
+,
+
+    body("password")
+    .notEmpty()
+    .withMessage("Password Cannot Be Empty")      
+]

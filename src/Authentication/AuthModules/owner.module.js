@@ -1,14 +1,14 @@
 import poolconn from "../../Connectivity/config.js";
 // create User
-export async function createUser(userName, email, hpassword, contact){
+export async function createUser(name, email, hpassword, contact){
     
     const [result] = await poolconn.query(
-        "INSERT INTO users (userName, email, password, contact) VALUES (?, ?, ?, ?)",
-        [userName, email, hpassword, contact]
+        "INSERT INTO owner (name, email, password, contact) VALUES (?, ?, ?, ?)",
+        [name, email, hpassword, contact]
     );
 
     const [user] = await poolconn.query(
-        "SELECT * FROM users WHERE id = ?",
+        "SELECT * FROM owner WHERE id = ?",
         [result.insertId]
     )
 
@@ -19,7 +19,7 @@ export async function createUser(userName, email, hpassword, contact){
 export async function getUser( email, password ) {
     
     const [checkuser] = await poolconn.query(
-        "SELECT * FROM users WHERE email = ? AND password = ? ",
+        "SELECT * FROM owner WHERE email = ? AND password = ? ",
         [email,password]
     )
     console.log("checkuser => ", checkuser);
@@ -29,7 +29,7 @@ export async function getUser( email, password ) {
 export async function findUserByEmail( email ) {
     
     const [userFound] = await poolconn.query(
-        "SELECT * FROM users WHERE email = ? ",
+        "SELECT * FROM owner WHERE email = ? ",
         [email]
     )
     return userFound[0];
