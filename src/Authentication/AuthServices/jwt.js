@@ -23,7 +23,7 @@ export const verifyToken = (req, res, next) => {
 
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            "My_secret_key"
         );
 
         req.user = decoded;
